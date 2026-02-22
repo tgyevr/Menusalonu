@@ -1530,7 +1530,7 @@
       <span class="input-eye" onclick="togglePassword('loginPass')">👁</span>
     </div>
     <div style="text-align:right;margin-bottom:1rem"><a href="#" class="form-link" style="font-size:0.82rem">Şifremi Unuttum</a></div>
-    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('Giriş yapıldı!');closeModal('loginModal')">Giriş Yap</button>
+    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="handleLogin()">Giriş Yap</button>
     <p style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--warm-gray)">
       Hesabınız yok mu? <a href="#" class="form-link" onclick="closeModal('loginModal');openModal('registerModal')">Kayıt Ol</a>
     </p>
@@ -1569,7 +1569,7 @@
         <a href="#" class="form-link">Kullanıcı Sözleşmesi</a> ve <a href="#" class="form-link">KVKK Aydınlatma Metni</a>'ni okudum, onaylıyorum.
       </label>
     </div>
-    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('Kayıt başarılı! E-posta adresinizi doğrulayın.');closeModal('registerModal')">Kayıt Ol</button>
+    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="handleRegister()" E-posta adresinizi doğrulayın.');closeModal('registerModal')">Kayıt Ol</button>
     <p style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--warm-gray)">
       Zaten hesabınız var mı? <a href="#" class="form-link" onclick="closeModal('registerModal');openModal('loginModal')">Giriş Yap</a>
     </p>
@@ -1609,7 +1609,7 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('İşletme kaydınız alındı! Paneliniz oluşturuldu.');closeModal('businessModal')">İşletmeyi Kaydet</button>
+    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="handleBusinessRegister()" Paneliniz oluşturuldu.');closeModal('businessModal')">İşletmeyi Kaydet</button>
   </div>
 </div>
 
