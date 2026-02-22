@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MenüŞalonu — Restoranları Keşfet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --dark: #1A1208;
+    --amber: #D48B2E;
+    --amber-light: #F0A830;
+    --rust: #C04E2A;
+    --sage: #5A7A5A;
+    --warm-gray: #8A7E6E;
+    --card-bg: #FFFDF7;
+    --border: #E8E0D0;
+    --shadow: rgba(26,18,8,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245,240,232,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 68px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 900;
+    color: var(--dark);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo span { color: var(--amber); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 0.25rem;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--warm-gray);
+    font-size: 0.9rem; font-weight: 500;
+    padding: 0.5rem 0.85rem; border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--dark); background: rgba(212,139,46,0.1); }
+
+  .nav-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 1.2rem; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; transition: all 0.22s; border: none; text-decoration: none;
+  }
+  .btn-ghost {
+    background: transparent; color: var(--dark);
+    border: 1.5px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); background: rgba(212,139,46,0.06); }
+
+  .btn-primary {
+    background: var(--amber); color: #fff;
+  }
+  .btn-primary:hover { background: var(--amber-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,139,46,0.35); }
+
+  .btn-rust { background: var(--rust); color: #fff; }
+  .btn-rust:hover { background: #d05a34; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(192,78,42,0.3); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: 0.3s; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 88vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; align-items: center;
+    padding: 4rem 4rem 4rem 6rem;
+    position: relative; overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; top: -20%; right: -5%;
+    width: 55%; height: 130%;
+    background: radial-gradient(ellipse at center, rgba(212,139,46,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-text { z-index: 1; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(212,139,46,0.12); color: var(--amber);
+    border: 1px solid rgba(212,139,46,0.25);
+    padding: 0.35rem 0.9rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1; font-weight: 900;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  .hero-title em { color: var(--amber); font-style: normal; }
+
+  .hero-sub {
+    color: var(--warm-gray); font-size: 1.05rem; line-height: 1.7;
+    max-width: 480px; margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.3s both;
+  }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem;
+    animation: fadeUp 0.6s ease 0.4s both;
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--dark);
+  }
+  .stat-label { font-size: 0.8rem; color: var(--warm-gray); margin-top: 2px; }
+
+  /* Hero Visual */
+  .hero-visual {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; padding: 2rem;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .restaurant-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px var(--shadow);
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+  }
+  .restaurant-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(26,18,8,0.14); }
+  .restaurant-card.featured { grid-column: span 2; }
+
+  .card-img {
+    height: 120px; width: 100%;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--amber) 0%, var(--rust) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+  }
+  .card-img.tall { height: 160px; font-size: 3rem; }
+
+  .card-body { padding: 1rem; }
+  .card-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
+  .card-category { font-size: 0.75rem; color: var(--warm-gray); margin-bottom: 0.5rem; }
+  .card-rating {
+    display: flex; align-items: center; gap: 0.25rem;
+    font-size: 0.8rem; font-weight: 600; color: var(--amber);
+  }
+
+  /* ===== SEARCH SECTION ===== */
+  .search-section {
+    background: var(--dark);
+    padding: 3.5rem 4rem;
+  }
+
+  .search-container {
+    max-width: 860px; margin: 0 auto; text-align: center;
+  }
+
+  .search-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream); font-size: 1.8rem; margin-bottom: 1.5rem;
+  }
+  .search-title span { color: var(--amber); }
+
+  .search-box {
+    display: flex; gap: 0;
+    background: var(--card-bg);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    margin-bottom: 1.5rem;
+  }
+
+  .search-location {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0 1.2rem; border-right: 1px solid var(--border);
+    font-size: 0.85rem; color: var(--warm-gray); white-space: nowrap;
+    cursor: pointer; min-width: 140px;
+  }
+
+  .search-input {
+    flex: 1; border: none; background: transparent;
+    padding: 1rem 1.2rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; color: var(--dark); outline: none;
+  }
+
+  .search-btn {
+    background: var(--amber); color: #fff; border: none;
+    padding: 0 1.8rem; font-weight: 700; font-size: 0.9rem;
+    cursor: pointer; transition: background 0.2s; white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .search-btn:hover { background: var(--amber-light); }
+
+  .search-tags {
+    display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;
+  }
+  .tag {
+    background: rgba(255,255,255,0.08); color: rgba(245,240,232,0.7);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 0.35rem 0.9rem; border-radius: 50px;
+    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+  }
+  .tag:hover { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+  /* ===== FILTERS ===== */
+  .filters-section { padding: 2rem 4rem 1rem; background: var(--cream); }
+  .filters-row {
+    display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;
+  }
+  .filter-label { font-size: 0.82rem; color: var(--warm-gray); font-weight: 600; margin-right: 0.25rem; }
+  .filter-chip {
+    display: flex; align-items: center; gap: 0.4rem;
+    background: var(--card-bg); border: 1.5px solid var(--border);
+    padding: 0.45rem 1rem; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; color: var(--dark);
+  }
+  .filter-chip:hover, .filter-chip.active {
+    border-color: var(--amber); color: var(--amber); background: rgba(212,139,46,0.08);
+  }
+  .filter-chip svg { width: 14px; height: 14px; }
+
+  /* ===== TABS ===== */
+  .tabs-section { padding: 1rem 4rem 0; }
+  .tabs {
+    display: flex; gap: 0; border-bottom: 2px solid var(--border);
+  }
+  .tab {
+    padding: 0.75rem 1.5rem; font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; color: var(--warm-gray); border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: all 0.2s; white-space: nowrap;
+  }
+  .tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+  .tab:hover { color: var(--dark); }
+
+  /* ===== LISTING ===== */
+  .listing-section { padding: 2rem 4rem 4rem; }
+
+  .listing-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .listing-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; }
+  .listing-count { font-size: 0.85rem; color: var(--warm-gray); }
+
+  .sort-select {
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 0.5rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; background: var(--card-bg); color: var(--dark);
+    cursor: pointer; outline: none;
+  }
+
+  .restaurant-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .listing-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 16px var(--shadow);
+    transition: all 0.25s; cursor: pointer;
+    text-decoration: none; color: inherit;
+    display: block;
+  }
+  .listing-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(26,18,8,0.16); }
+
+  .listing-card-img {
+    height: 180px; width: 100%; position: relative;
+    display: flex; align-items: center; justify-content: center; font-size: 3.5rem;
+  }
+
+  .listing-card-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--amber); color: #fff;
+    padding: 0.2rem 0.7rem; border-radius: 50px; font-size: 0.72rem; font-weight: 700;
+  }
+  .listing-card-badge.open { background: var(--sage); }
+  .listing-card-badge.campaign { background: var(--rust); }
+
+  .listing-card-body { padding: 1.2rem; }
+
+  .listing-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+  .listing-card-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; }
+  .listing-card-fav {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 0.9rem; transition: all 0.2s; flex-shrink: 0;
+  }
+  .listing-card-fav:hover { border-color: var(--rust); background: rgba(192,78,42,0.08); }
+  .listing-card-fav.active { background: var(--rust); border-color: var(--rust); }
+
+  .listing-card-meta {
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.8rem; color: var(--warm-gray); margin-bottom: 0.75rem;
+  }
+  .listing-card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+  .listing-card-tags {
+    display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem;
+  }
+  .listing-tag {
+    background: rgba(212,139,46,0.1); color: #8A5A1A;
+    padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.72rem; font-weight: 500;
+  }
+
+  .listing-card-actions {
+    display: flex; gap: 0.5rem;
+  }
+  .btn-sm {
+    flex: 1; padding: 0.55rem 0.5rem; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; border: none; text-align: center; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-sm-primary { background: var(--amber); color: #fff; }
+  .btn-sm-primary:hover { background: var(--amber-light); }
+  .btn-sm-outline { background: transparent; border: 1.5px solid var(--border); color: var(--dark); }
+  .btn-sm-outline:hover { border-color: var(--amber); color: var(--amber); }
+
+  .load-more {
+    text-align: center; margin-top: 3rem;
+  }
+
+  /* ===== FEATURES SECTION ===== */
+  .features-section {
+    background: var(--dark); padding: 5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .features-section::before {
+    content: '';
+    position: absolute; top: -50%; left: -10%;
+    width: 60%; height: 200%;
+    background: radial-gradient(ellipse, rgba(212,139,46,0.08) 0%, transparent 60%);
+  }
+
+  .section-header { text-align: center; margin-bottom: 3.5rem; }
+  .section-eyebrow {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--amber); margin-bottom: 0.75rem; display: block;
+  }
+  .section-title-light {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem); color: var(--cream); font-weight: 700;
+  }
+  .section-sub { color: rgba(245,240,232,0.5); font-size: 1rem; margin-top: 0.75rem; }
+
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1100px; margin: 0 auto; position: relative;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 2rem;
+    transition: all 0.3s;
+  }
+  .feature-card:hover {
+    background: rgba(212,139,46,0.08);
+    border-color: rgba(212,139,46,0.3);
+    transform: translateY(-3px);
+  }
+  .feature-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: rgba(212,139,46,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.2rem;
+  }
+  .feature-name { color: var(--cream); font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+  .feature-desc { color: rgba(245,240,232,0.5); font-size: 0.85rem; line-height: 1.6; }
+
+  /* ===== HOW IT WORKS ===== */
+  .how-section { padding: 5rem 4rem; background: var(--cream); }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 700;
+  }
+
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2rem; margin-top: 3rem; max-width: 1100px; margin: 3rem auto 0;
+    position: relative;
+  }
+  .steps-grid::before {
+    content: ''; position: absolute;
+    top: 28px; left: calc(12.5% + 28px); right: calc(12.5% + 28px);
+    height: 2px; background: linear-gradient(90deg, var(--amber) 0%, var(--rust) 100%);
+    z-index: 0;
+  }
+
+  .step-item { text-align: center; position: relative; z-index: 1; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--amber); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700;
+    margin: 0 auto 1.2rem; box-shadow: 0 4px 16px rgba(212,139,46,0.4);
+  }
+  .step-title { font-weight: 700; margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .step-desc { font-size: 0.82rem; color: var(--warm-gray); line-height: 1.5; }
+
+  /* ===== FAQ ===== */
+  .faq-section { padding: 5rem 4rem; background: var(--card-bg); }
+
+  .faq-grid {
+    max-width: 800px; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 0;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .faq-question {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 0; cursor: pointer;
+    font-weight: 600; font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--amber); }
+
+  .faq-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; transition: all 0.3s; flex-shrink: 0;
+    color: var(--warm-gray);
+  }
+
+  .faq-answer {
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    font-size: 0.9rem; color: var(--warm-gray); line-height: 1.7;
+  }
+  .faq-answer-inner { padding-bottom: 1.25rem; }
+
+  .faq-item.open .faq-icon { background: var(--amber); border-color: var(--amber); color: #fff; transform: rotate(45deg); }
+  .faq-item.open .faq-answer { max-height: 300px; }
+
+  /* ===== PROFILE PAGE ===== */
+  .profile-page {
+    display: none;
+    min-height: 100vh;
+  }
+  .profile-page.visible { display: block; }
+
+  .profile-hero {
+    height: 240px;
+    background: linear-gradient(135deg, var(--dark) 0%, #3A2A12 50%, var(--rust) 100%);
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    padding: 2rem 4rem; position: relative; overflow: hidden;
+  }
+  .profile-hero::before {
+    content: '🍽️'; position: absolute; right: 4rem; top: 50%; transform: translateY(-50%);
+    font-size: 8rem; opacity: 0.15;
+  }
+
+  .profile-hero-content {
+    display: flex; align-items: flex-end; gap: 1.5rem; z-index: 1;
+  }
+
+  .profile-logo {
+    width: 90px; height: 90px; border-radius: 20px;
+    background: var(--amber); display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; border: 3px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .profile-info { padding-bottom: 0.5rem; }
+  .profile-name { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; }
+  .profile-category { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 1rem; }
+  .profile-rating { color: var(--amber); display: flex; align-items: center; gap: 0.3rem; font-weight: 700; }
+
+  .profile-tabs {
+    background: var(--card-bg); border-bottom: 2px solid var(--border);
+    padding: 0 4rem;
+    position: sticky; top: 68px; z-index: 50;
+    display: flex; gap: 0; overflow-x: auto;
+  }
+
+  .profile-tab {
+    padding: 1rem 1.3rem; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; color: var(--warm-gray); border-bottom: 2px solid transparent;
+    margin-bottom: -2px; white-space: nowrap; transition: all 0.2s;
+  }
+  .profile-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+  .profile-actions-bar {
+    background: var(--card-bg); padding: 1rem 4rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 0.75rem; align-items: center; justify-content: flex-end;
+  }
+
+  .profile-content { padding: 2.5rem 4rem; display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
+
+  /* Menu items */
+  .menu-search-box {
+    display: flex; gap: 0;
+    background: var(--cream); border: 1.5px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-bottom: 1.5rem;
+  }
+  .menu-search-box input {
+    flex: 1; border: none; background: transparent; padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none;
+  }
+  .menu-search-icon { padding: 0 1rem; display: flex; align-items: center; color: var(--warm-gray); }
+
+  .menu-categories {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .menu-cat-chip {
+    padding: 0.45rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border); background: var(--card-bg);
+    transition: all 0.2s; color: var(--dark);
+  }
+  .menu-cat-chip:hover, .menu-cat-chip.active { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+  .menu-section-title {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border);
+  }
+
+  .menu-items { display: flex; flex-direction: column; gap: 0; }
+  .menu-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem 0; border-bottom: 1px solid var(--border);
+    transition: background 0.2s; border-radius: 12px; margin: 0 -0.75rem; padding: 1.2rem 0.75rem;
+  }
+  .menu-item:hover { background: rgba(212,139,46,0.04); }
+
+  .menu-item-img {
+    width: 80px; height: 80px; border-radius: 12px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--amber) 0%, var(--rust) 100%);
+    display: flex; align-items: center; justify-content: center; font-size: 2rem;
+  }
+
+  .menu-item-body { flex: 1; }
+  .menu-item-name { font-weight: 700; font-size: 0.95rem; }
+  .menu-item-desc { font-size: 0.8rem; color: var(--warm-gray); margin-top: 0.25rem; line-height: 1.4; }
+
+  .menu-item-right { text-align: right; flex-shrink: 0; }
+  .menu-item-price { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--amber); }
+  .menu-item-status {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    font-size: 0.72rem; font-weight: 700; margin-top: 0.3rem;
+    padding: 0.2rem 0.6rem; border-radius: 50px;
+  }
+  .status-available { background: rgba(90,122,90,0.15); color: var(--sage); }
+  .status-out { background: rgba(138,126,110,0.15); color: var(--warm-gray); }
+
+  /* Sidebar */
+  .profile-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+  .sidebar-card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem;
+  }
+  .sidebar-card-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 1rem; color: var(--dark); }
+
+  .info-row {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    font-size: 0.85rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .info-label { font-size: 0.72rem; color: var(--warm-gray); }
+  .info-value { font-weight: 600; font-size: 0.85rem; }
+
+  .amenity-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .amenity-badge {
+    background: rgba(212,139,46,0.08); color: #8A5A1A;
+    border: 1px solid rgba(212,139,46,0.2);
+    padding: 0.25rem 0.65rem; border-radius: 8px; font-size: 0.72rem; font-weight: 500;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark); color: rgba(245,240,232,0.7);
+    padding: 4rem 4rem 2rem;
+  }
+
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem;
+  }
+
+  .footer-brand {}
+  .footer-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900;
+    color: var(--cream); margin-bottom: 0.75rem;
+  }
+  .footer-logo span { color: var(--amber); }
+  .footer-desc { font-size: 0.85rem; line-height: 1.7; max-width: 280px; }
+
+  .footer-col-title { color: var(--cream); font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.03em; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links a { color: rgba(245,240,232,0.55); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--amber); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-copy { font-size: 0.8rem; }
+  .footer-socials { display: flex; gap: 0.5rem; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit;
+  }
+  .social-btn:hover { border-color: var(--amber); background: rgba(212,139,46,0.15); }
+
+  /* ===== FEEDBACK FORM ===== */
+  .feedback-section { padding: 4rem; background: var(--cream); border-top: 1px solid var(--border); }
+  .feedback-container { max-width: 600px; margin: 0 auto; text-align: center; }
+  .feedback-form {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; margin-top: 2rem; text-align: left;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--dark); }
+  .form-control {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 0.7rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    background: var(--cream); color: var(--dark); outline: none; transition: border 0.2s;
+  }
+  .form-control:focus { border-color: var(--amber); }
+  textarea.form-control { min-height: 100px; resize: vertical; }
+  .type-selector { display: flex; gap: 0.5rem; }
+  .type-option {
+    flex: 1; padding: 0.6rem; border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: center; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.2s;
+  }
+  .type-option.active { border-color: var(--amber); background: rgba(212,139,46,0.1); color: var(--amber); }
+
+  /* Modals */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(26,18,8,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    padding: 1rem;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    background: var(--card-bg); border-radius: 24px; padding: 2.5rem;
+    width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+    transform: translateY(20px) scale(0.97); transition: transform 0.25s;
+  }
+  .modal-overlay.open .modal { transform: none; }
+
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .modal-sub { color: var(--warm-gray); font-size: 0.88rem; margin-bottom: 2rem; }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--cream); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem;
+    line-height: 1; transition: all 0.2s;
+  }
+  .modal-close:hover { background: var(--border); }
+
+  .modal-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .modal-tab {
+    flex: 1; padding: 0.7rem; border-radius: 10px; border: 1.5px solid var(--border);
+    text-align: center; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .modal-tab.active { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+  .social-login {
+    display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+  }
+  .social-login-btn {
+    flex: 1; padding: 0.7rem; border-radius: 10px; border: 1.5px solid var(--border);
+    background: var(--cream); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .social-login-btn:hover { border-color: var(--amber); }
+
+  .divider-text {
+    text-align: center; font-size: 0.78rem; color: var(--warm-gray);
+    position: relative; margin: 1rem 0;
+  }
+  .divider-text::before, .divider-text::after {
+    content: ''; position: absolute; top: 50%; width: 40%;
+    height: 1px; background: var(--border);
+  }
+  .divider-text::before { left: 0; }
+  .divider-text::after { right: 0; }
+
+  .form-link { color: var(--amber); text-decoration: none; font-weight: 600; }
+  .form-link:hover { text-decoration: underline; }
+
+  .input-group { position: relative; margin-bottom: 1rem; }
+  .input-group .form-control { padding-right: 2.5rem; }
+  .input-eye {
+    position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+    cursor: pointer; color: var(--warm-gray); font-size: 1rem;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; padding: 3rem 2.5rem; text-align: center; }
+    .hero-visual { display: none; }
+    .hero-sub { max-width: none; }
+    .hero-actions, .hero-stats { justify-content: center; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid::before { display: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .profile-content { grid-template-columns: 1fr; }
+    .profile-sidebar { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links, .nav-actions .btn-ghost { display: none; }
+    .hamburger { display: flex; }
+    .hero { padding: 2.5rem 1.5rem; }
+    .search-section, .filters-section, .tabs-section, .listing-section, .features-section, .how-section, .faq-section, .feedback-section, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .search-box { flex-direction: column; border-radius: 12px; }
+    .search-location { border-right: none; border-bottom: 1px solid var(--border); padding: 0.75rem 1rem; }
+    .search-btn { padding: 0.9rem 1.5rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    .profile-hero { padding: 1.5rem; height: 200px; }
+    .profile-tabs { padding: 0 1.5rem; }
+    .profile-actions-bar { padding: 0.75rem 1.5rem; flex-wrap: wrap; }
+    .profile-content { padding: 1.5rem; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .hero-stats { gap: 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .profile-hero::before { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .restaurant-grid { grid-template-columns: 1fr; }
+    .tabs { overflow-x: auto; }
+    .hero-title { font-size: 2.2rem; }
+  }
+
+  /* Mobile Nav */
+  .mobile-menu {
+    position: fixed; inset: 68px 0 0 0;
+    background: var(--cream); z-index: 99;
+    padding: 2rem 1.5rem;
+    transform: translateX(100%); transition: transform 0.3s ease;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu a {
+    text-decoration: none; color: var(--dark);
+    font-size: 1.1rem; font-weight: 500; padding: 1rem;
+    border-radius: 12px; border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .mobile-menu a:hover { background: rgba(212,139,46,0.08); color: var(--amber); }
+  .mobile-menu .btn { margin-top: 1rem; justify-content: center; padding: 1rem; font-size: 1rem; }
+
+  /* Page views */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Rating stars */
+  .stars { color: var(--amber); letter-spacing: 1px; }
+
+  /* Scroll behavior */
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('home')">Menü<span>Şalonu</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')">Anasayfa</a></li>
+    <li><a href="#features">Özellikler</a></li>
+    <li><a href="#how">Nasıl Çalışır</a></li>
+    <li><a href="#faq">SSS</a></li>
+    <li><a href="#contact">İletişim</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="openModal('loginModal')">Giriş Yap</button>
+    <button class="btn btn-primary" onclick="openModal('registerModal')">Üye Ol</button>
+    <div class="hamburger" onclick="toggleMobileMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home');toggleMobileMenu()">🏠 Anasayfa</a>
+  <a href="#features" onclick="toggleMobileMenu()">✨ Özellikler</a>
+  <a href="#how" onclick="toggleMobileMenu()">📖 Nasıl Çalışır</a>
+  <a href="#faq" onclick="toggleMobileMenu()">❓ SSS</a>
+  <a href="#contact" onclick="toggleMobileMenu()">📬 İletişim</a>
+  <button class="btn btn-ghost" style="margin-top:0.5rem" onclick="openModal('loginModal');toggleMobileMenu()">Giriş Yap</button>
+  <button class="btn btn-primary" onclick="openModal('registerModal');toggleMobileMenu()">Üye Ol</button>
+</div>
+
+<!-- ============================== HOME PAGE ============================== -->
+<div id="homePage" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">🇹🇷 Türkiye'nin Menü Platformu</div>
+      <h1 class="hero-title">
+        En Lezzetli<br>Mekânları <em>Keşfet</em>
+      </h1>
+      <p class="hero-sub">
+        Binlerce restoran, kafe ve işletmenin menülerini tek platformda incele. Karşılaştır, filtrele ve en iyi deneyimi yaşa.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" style="padding:0.75rem 2rem;font-size:0.95rem" onclick="scrollToSearch()">
+          🔍 Restoran Ara
+        </button>
+        <button class="btn btn-ghost" style="padding:0.75rem 1.5rem;font-size:0.95rem" onclick="openModal('businessModal')">
+          İşletmeni Ekle →
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">2.4K+</div>
+          <div class="stat-label">Kayıtlı İşletme</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">48K</div>
+          <div class="stat-label">Mutlu Kullanıcı</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">81</div>
+          <div class="stat-label">İl Kapsamı</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="restaurant-card featured" onclick="showPage('profile')">
+        <div class="card-img tall">🍕</div>
+        <div class="card-body">
+          <div class="card-name">La Bella Cucina</div>
+          <div class="card-category">İtalyan Mutfağı · Kadıköy, İstanbul</div>
+          <div class="card-rating">★ 4.8 <span style="color:var(--warm-gray);font-weight:400">(312 yorum)</span></div>
+        </div>
+      </div>
+      <div class="restaurant-card">
+        <div class="card-img">🍣</div>
+        <div class="card-body">
+          <div class="card-name">Sushi Nakama</div>
+          <div class="card-rating">★ 4.6</div>
+        </div>
+      </div>
+      <div class="restaurant-card">
+        <div class="card-img">☕</div>
+        <div class="card-body">
+          <div class="card-name">Brew & Roast</div>
+          <div class="card-rating">★ 4.9</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section" id="search">
+    <div class="search-container">
+      <h2 class="search-title">Ne aramak istersiniz? <span>🍽️</span></h2>
+      <div class="search-box">
+        <div class="search-location" onclick="alert('Konum seçici açılır')">
+          📍 İstanbul &nbsp; ▾
+        </div>
+        <input type="text" class="search-input" placeholder="Yemek, mutfak veya restoran arayın..." id="searchInput"
+          onkeydown="if(event.key==='Enter')filterSearch()">
+        <button class="search-btn" onclick="filterSearch()">Ara</button>
+      </div>
+      <div class="search-tags">
+        <span class="tag" onclick="filterByTag('Kebap')">🥙 Kebap</span>
+        <span class="tag" onclick="filterByTag('Kahve')">☕ Kahve</span>
+        <span class="tag" onclick="filterByTag('Pizza')">🍕 Pizza</span>
+        <span class="tag" onclick="filterByTag('Sushi')">🍣 Sushi</span>
+        <span class="tag" onclick="filterByTag('Burger')">🍔 Burger</span>
+        <span class="tag" onclick="filterByTag('Vegan')">🌱 Vegan</span>
+        <span class="tag" onclick="filterByTag('Tatlı')">🍰 Tatlı</span>
+        <span class="tag" onclick="filterByTag('Kahvaltı')">🍳 Kahvaltı</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <section class="filters-section">
+    <div class="filters-row">
+      <span class="filter-label">Filtrele:</span>
+      <div class="filter-chip active" onclick="toggleFilter(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+        Tümü
+      </div>
+      <div class="filter-chip" onclick="toggleFilter(this)">📍 Konuma Göre</div>
+      <div class="filter-chip" onclick="toggleFilter(this)">⭐ Puana Göre</div>
+      <div class="filter-chip" onclick="toggleFilter(this)">💰 Fiyat Aralığı</div>
+      <div class="filter-chip" onclick="toggleFilter(this)">🍽️ Yemek Türü</div>
+      <div class="filter-chip" onclick="toggleFilter(this)">🎯 Olanaklar</div>
+      <div class="filter-chip" onclick="toggleFilter(this)">💳 Ödeme Yöntemi</div>
+      <div class="filter-chip" onclick="toggleFilter(this)">🌍 Mutfak Türü</div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section class="tabs-section">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'recommended')">⭐ Önerilen</div>
+      <div class="tab" onclick="switchTab(this,'campaigns')">🏷️ Kampanyalar</div>
+      <div class="tab" onclick="switchTab(this,'all')">🍽️ Tüm İşletmeler</div>
+      <div class="tab" onclick="switchTab(this,'favorites')">❤️ Favorilerim</div>
+      <div class="tab" onclick="switchTab(this,'compare')">⚖️ Karşılaştır</div>
+      <div class="tab" onclick="switchTab(this,'map')">🗺️ Harita</div>
+    </div>
+  </section>
+
+  <!-- LISTING -->
+  <section class="listing-section">
+    <div class="listing-header">
+      <div>
+        <h2 class="listing-title">Önerilen Restoranlar</h2>
+        <p class="listing-count" id="listingCount">247 işletme listeleniyor</p>
+      </div>
+      <select class="sort-select" onchange="sortListings(this.value)">
+        <option value="recommended">Önerilenler</option>
+        <option value="rating">Puanı Yüksek</option>
+        <option value="reviews">En Çok Yorumlanan</option>
+        <option value="newest">Yeni Eklenen</option>
+      </select>
+    </div>
+
+    <div class="restaurant-grid" id="restaurantGrid">
+      <!-- Cards generated by JS -->
+    </div>
+
+    <div class="load-more">
+      <button class="btn btn-ghost" style="padding:0.75rem 2.5rem" onclick="loadMore()">
+        Daha Fazla Göster ↓
+      </button>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="section-header">
+      <span class="section-eyebrow">Neden MenüŞalonu?</span>
+      <h2 class="section-title-light">Tek Platformda Her Şey</h2>
+      <p class="section-sub">İşletmeler ve kullanıcılar için tasarlanmış güçlü özellikler</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-name">Dijital Menü</div>
+        <div class="feature-desc">QR kod ile anında erişilebilir, her zaman güncel dijital menülerinizi kolayca oluşturun ve yönetin.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-name">Akıllı Arama & Filtreleme</div>
+        <div class="feature-desc">40+ yemek kategorisi, olanaklar, fiyat aralığı ve ödeme yöntemlerine göre gelişmiş filtreleme.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <div class="feature-name">Rezervasyon Sistemi</div>
+        <div class="feature-desc">Online rezervasyon alın, müşterilerinizle kolayca iletişim kurun, takvim yönetin.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-name">Detaylı Analitik</div>
+        <div class="feature-desc">Menü görüntülenme, QR kod tarama istatistikleri ve ziyaretçi analizleriyle işletmenizi büyütün.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-name">Yorum & Değerlendirme</div>
+        <div class="feature-desc">Gerçek müşteri yorumları alın, yanıt verin ve online itibarınızı güçlendirin.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-name">Kampanya Yönetimi</div>
+        <div class="feature-desc">Özel indirim ve kampanyalarınızı yayınlayın, geniş müşteri kitlesine ulaşın.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="section-header" style="text-align:center">
+      <span class="section-eyebrow" style="color:var(--amber)">Başlamak Kolay</span>
+      <h2 class="section-title">Nasıl Çalışır?</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-title">Üye Ol</div>
+        <div class="step-desc">Ücretsiz hesap oluştur, e-posta ile doğrula ve platformu keşfetmeye başla.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-title">Keşfet & Filtrele</div>
+        <div class="step-desc">Konumuna göre restoranları keşfet, yemek türü ve olanaklara göre filtrele.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-title">Menü İncele</div>
+        <div class="step-desc">Güncel fiyatlarla menüleri incele, restoranları karşılaştır, favorile.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-title">Rezervasyon Yap</div>
+        <div class="step-desc">Seçtiğin restorana anında online rezervasyon yap, onay al.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-header" style="text-align:center">
+      <span class="section-eyebrow" style="color:var(--amber)">Merak Edilenler</span>
+      <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          MenüŞalonu'na üye olmak ücretsiz mi?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">Evet, kullanıcı olarak platforma üye olmak tamamen ücretsizdir. Restoran ve işletmeler için ise 1 aylık ücretsiz demo sürecinin ardından ücretli abonelik paketleri sunulmaktadır.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          İşletmemi platforma nasıl eklerim?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">İşletme Kayıt formunu doldurarak hemen başlayabilirsiniz. Temel bilgilerinizi girdikten sonra işletme paneliniz otomatik oluşturulur. Menünüzü ekleyip QR kodunuzu oluşturabilirsiniz.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Menüleri kim güncelleyebilir?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">Sadece işletme sahibi hesabından giriş yaparak menünüzü düzenleyebilirsiniz. Ürün ekleme, fiyat güncelleme ve kategori yönetimi gibi tüm işlemler işletme panelinizden yapılır.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          QR kod nasıl çalışır?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">İşletme panelinizden QR kodunuzu oluşturup masalara, kapılara veya broşürlere ekleyebilirsiniz. Müşterileriniz kodu tarayınca direkt menünüze yönlendirilir. Masa bazlı çoklu QR kod desteği de mevcuttur.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Rezervasyon sistemi zorunlu mu?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">Hayır, rezervasyon sistemini işletme panelinizden aktif veya pasif yapabilirsiniz. İstediğiniz özellikleri açıp kapatma esnekliğine sahipsiniz.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section class="feedback-section" id="contact">
+    <div class="feedback-container">
+      <span class="section-eyebrow" style="color:var(--amber)">Bize Ulaşın</span>
+      <h2 class="section-title" style="margin-top:0.5rem">İstek, Öneri & Şikayet</h2>
+      <div class="feedback-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ad Soyad</label>
+            <input type="text" class="form-control" placeholder="Adınız">
+          </div>
+          <div class="form-group">
+            <label>E-posta</label>
+            <input type="email" class="form-control" placeholder="ornek@mail.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Bildirim Türü</label>
+          <div class="type-selector">
+            <div class="type-option active" onclick="selectType(this)">💡 İstek</div>
+            <div class="type-option" onclick="selectType(this)">✨ Öneri</div>
+            <div class="type-option" onclick="selectType(this)">⚠️ Şikayet</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mesajınız</label>
+          <textarea class="form-control" placeholder="Düşüncelerinizi paylaşın..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:0.85rem;font-size:0.95rem" onclick="alert('Mesajınız iletildi. Teşekkürler!')">Gönder</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Menü<span>Şalonu</span></div>
+        <p class="footer-desc">Türkiye'nin en kapsamlı restoran menü platformu. Lezzetli deneyimler için doğru adres.</p>
+        <div style="margin-top:1rem;font-size:0.82rem">
+          📍 İstanbul, Türkiye<br>
+          📧 info@menusalonu.com<br>
+          📞 +90 (212) 000 00 00
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-links">
+          <li><a href="#">Hakkımızda</a></li>
+          <li><a href="#">Nasıl Çalışır</a></li>
+          <li><a href="#">Fiyatlandırma</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">İletişim</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Yasal</div>
+        <ul class="footer-links">
+          <li><a href="#">Kullanıcı Sözleşmesi</a></li>
+          <li><a href="#">Gizlilik Politikası</a></li>
+          <li><a href="#">KVKK Aydınlatma</a></li>
+          <li><a href="#">Çerez Politikası</a></li>
+          <li><a href="#">Mesafeli Satış S.</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">İşletmeler</div>
+        <ul class="footer-links">
+          <li><a href="#" onclick="openModal('businessModal')">İşletmeni Ekle</a></li>
+          <li><a href="#">İşletme Paneli</a></li>
+          <li><a href="#">QR Kod Oluştur</a></li>
+          <li><a href="#">Paketler</a></li>
+          <li><a href="#">Destek</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 MenüŞalonu. Tüm hakları saklıdır.</div>
+      <div class="footer-socials">
+        <a class="social-btn" href="#" title="Instagram">📸</a>
+        <a class="social-btn" href="#" title="Twitter">🐦</a>
+        <a class="social-btn" href="#" title="Facebook">📘</a>
+        <a class="social-btn" href="#" title="WhatsApp">💬</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /home page -->
+
+
+<!-- ============================== PROFILE PAGE ============================== -->
+<div id="profilePage" class="page">
+
+  <!-- Hero -->
+  <div class="profile-hero">
+    <div class="profile-hero-content">
+      <div class="profile-logo">🍕</div>
+      <div class="profile-info">
+        <div class="profile-name">La Bella Cucina</div>
+        <div class="profile-category">
+          <span>🍝 İtalyan Mutfağı</span>
+          <span>📍 Kadıköy, İstanbul</span>
+          <span class="profile-rating">⭐ 4.8 <span style="color:rgba(255,255,255,0.5);font-weight:400">(312 yorum)</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="profile-tabs">
+    <div class="profile-tab active" onclick="switchProfileTab(this,'menu')">🍽️ Menü</div>
+    <div class="profile-tab" onclick="switchProfileTab(this,'about')">ℹ️ Hakkında</div>
+    <div class="profile-tab" onclick="switchProfileTab(this,'photos')">📸 Fotoğraflar</div>
+    <div class="profile-tab" onclick="switchProfileTab(this,'hours')">🕐 Çalışma Saatleri</div>
+    <div class="profile-tab" onclick="switchProfileTab(this,'reservation')">📅 Rezervasyon</div>
+    <div class="profile-tab" onclick="switchProfileTab(this,'reviews')">⭐ Yorumlar</div>
+    <div class="profile-tab" onclick="switchProfileTab(this,'campaigns')">🏷️ Kampanyalar</div>
+  </div>
+
+  <!-- Actions Bar -->
+  <div class="profile-actions-bar">
+    <button class="btn btn-ghost" onclick="alert('Favorilere eklendi ❤️')" style="font-size:0.82rem;padding:0.5rem 1rem">❤️ Favorile</button>
+    <button class="btn btn-ghost" onclick="shareModal()" style="font-size:0.82rem;padding:0.5rem 1rem">🔗 Paylaş</button>
+    <button class="btn btn-primary" onclick="switchProfileTab(document.querySelector('[onclick*=reservation]'), 'reservation')" style="font-size:0.82rem;padding:0.5rem 1.2rem">📅 Rezervasyon Yap</button>
+    <button class="btn btn-ghost" style="font-size:0.82rem;padding:0.5rem 0.75rem" onclick="showPage('home')">← Geri Dön</button>
+  </div>
+
+  <!-- Content -->
+  <div class="profile-content">
+    <div>
+      <!-- Menu Tab -->
+      <div id="tab-menu">
+        <div class="menu-search-box">
+          <span class="menu-search-icon">🔍</span>
+          <input type="text" placeholder="Menüde ara..." oninput="filterMenu(this.value)">
+        </div>
+
+        <div class="menu-categories">
+          <div class="menu-cat-chip active" onclick="switchMenuCat(this,'all')">Tümü</div>
+          <div class="menu-cat-chip" onclick="switchMenuCat(this,'pizza')">🍕 Pizzalar</div>
+          <div class="menu-cat-chip" onclick="switchMenuCat(this,'pasta')">🍝 Makarnalar</div>
+          <div class="menu-cat-chip" onclick="switchMenuCat(this,'salad')">🥗 Salatalar</div>
+          <div class="menu-cat-chip" onclick="switchMenuCat(this,'dessert')">🍮 Tatlılar</div>
+          <div class="menu-cat-chip" onclick="switchMenuCat(this,'drinks')">🥤 İçecekler</div>
+        </div>
+
+        <h3 class="menu-section-title">🍕 Pizzalar</h3>
+        <div class="menu-items" id="menuItems">
+          <div class="menu-item">
+            <div class="menu-item-img">🍕</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Margherita</div>
+              <div class="menu-item-desc">Domates sosu, taze mozzarella, fesleğen yaprakları</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺280</div>
+              <div class="menu-item-status status-available">● Mevcut</div>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍕</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Diavola</div>
+              <div class="menu-item-desc">Acı sosis, jalapeno, kırmızı biber, mozzarella</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺320</div>
+              <div class="menu-item-status status-available">● Mevcut</div>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍕</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Quattro Formaggi</div>
+              <div class="menu-item-desc">4 çeşit peynir: mozzarella, gorgonzola, parmesan, ricotta</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺360</div>
+              <div class="menu-item-status status-out">○ Tükendi</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="menu-section-title" style="margin-top:2rem">🍝 Makarnalar</h3>
+        <div class="menu-items">
+          <div class="menu-item">
+            <div class="menu-item-img">🍝</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Spaghetti Carbonara</div>
+              <div class="menu-item-desc">Guanciale, yumurta sarısı, pecorino romano, karabiber</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺290</div>
+              <div class="menu-item-status status-available">● Mevcut</div>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍝</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Penne Arrabbiata</div>
+              <div class="menu-item-desc">Domates sosu, sarımsak, kırmızı pul biber, fesleğen</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺240</div>
+              <div class="menu-item-status status-available">● Mevcut</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="menu-section-title" style="margin-top:2rem">🍮 Tatlılar</h3>
+        <div class="menu-items">
+          <div class="menu-item">
+            <div class="menu-item-img">🍮</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Tiramisu</div>
+              <div class="menu-item-desc">Klasik İtalyan tarifle mascarpone, espresso, ladyfinger</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺145</div>
+              <div class="menu-item-status status-available">● Mevcut</div>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍫</div>
+            <div class="menu-item-body">
+              <div class="menu-item-name">Panna Cotta</div>
+              <div class="menu-item-desc">Vanilyalı sütlü puding, orman meyveleri sosu</div>
+            </div>
+            <div class="menu-item-right">
+              <div class="menu-item-price">₺125</div>
+              <div class="menu-item-status status-available">● Mevcut</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Tab (hidden) -->
+      <div id="tab-about" style="display:none">
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:1rem">Hakkımızda</h3>
+        <p style="color:var(--warm-gray);line-height:1.8;margin-bottom:1.5rem">
+          2015 yılında kurulan La Bella Cucina, İstanbul'un kalbinde otantik İtalyan mutfağını yaşatıyor. 
+          Napoli'den getirilen taş fırınımızda pişirilen pizzalarımız ve taze malzemelerle hazırlanan makarnalarımızla 
+          size gerçek bir İtalya deneyimi sunuyoruz.
+        </p>
+        <div style="background:rgba(212,139,46,0.08);border:1px solid rgba(212,139,46,0.2);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
+          <strong>🍷 Şarap Koleksiyonu:</strong> Italya'nın en seçkin bölgelerinden özenle seçilmiş şaraplarımızla yemeğinizi taçlandırın.
+        </div>
+        <h4 style="font-weight:700;margin-bottom:0.75rem">Sosyal Medya</h4>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <a href="#" class="btn btn-ghost" style="font-size:0.82rem;padding:0.5rem 1rem">📸 Instagram</a>
+          <a href="#" class="btn btn-ghost" style="font-size:0.82rem;padding:0.5rem 1rem">📘 Facebook</a>
+          <a href="#" class="btn btn-ghost" style="font-size:0.82rem;padding:0.5rem 1rem">💬 WhatsApp</a>
+        </div>
+      </div>
+
+      <!-- Reservation Tab (hidden) -->
+      <div id="tab-reservation" style="display:none">
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:1.5rem">Rezervasyon Yap</h3>
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:1.5rem">
+          <div class="form-row">
+            <div class="form-group"><label>Ad Soyad</label><input type="text" class="form-control" placeholder="Adınız Soyadınız"></div>
+            <div class="form-group"><label>Telefon</label><input type="tel" class="form-control" placeholder="+90 5__"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Tarih</label><input type="date" class="form-control"></div>
+            <div class="form-group"><label>Saat</label><input type="time" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label>Kişi Sayısı</label>
+            <select class="form-control">
+              <option>1 Kişi</option><option>2 Kişi</option><option>3-4 Kişi</option><option>5-6 Kişi</option><option>7+ Kişi</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Özel İstek (Opsiyonel)</label><textarea class="form-control" placeholder="Özel istek veya notlarınız..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('Rezervasyonunuz alınmıştır! Onay için sizi arayacağız.')">Rezervasyon Talebi Gönder</button>
+        </div>
+      </div>
+
+      <!-- Reviews Tab (hidden) -->
+      <div id="tab-reviews" style="display:none">
+        <div style="display:flex;align-items:center;gap:2rem;margin-bottom:2rem;padding:1.5rem;background:var(--card-bg);border:1px solid var(--border);border-radius:16px">
+          <div style="text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--amber)">4.8</div>
+            <div class="stars">★★★★★</div>
+            <div style="font-size:0.8rem;color:var(--warm-gray);margin-top:0.25rem">312 Yorum</div>
+          </div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;font-size:0.85rem">
+              <span>5 ★</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px"><div style="width:72%;height:100%;background:var(--amber);border-radius:3px"></div></div><span style="color:var(--warm-gray)">72%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;font-size:0.85rem">
+              <span>4 ★</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px"><div style="width:20%;height:100%;background:var(--amber-light);border-radius:3px"></div></div><span style="color:var(--warm-gray)">20%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem">
+              <span>3 ★</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px"><div style="width:8%;height:100%;background:var(--warm-gray);border-radius:3px"></div></div><span style="color:var(--warm-gray)">8%</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;padding:1.25rem;background:var(--card-bg);border:1px solid var(--border);border-radius:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+            <strong>Mehmet Y.</strong>
+            <div class="stars" style="font-size:0.85rem">★★★★★</div>
+          </div>
+          <p style="font-size:0.88rem;color:var(--warm-gray);line-height:1.6">Mükemmel bir akşam yemeği deneyimi! Carbonara harika, fiyat-performans çok iyi. Kesinlikle tavsiye ederim.</p>
+          <div style="font-size:0.75rem;color:var(--warm-gray);margin-top:0.5rem">12 Ocak 2025</div>
+        </div>
+        <div style="margin-bottom:1rem;padding:1.25rem;background:var(--card-bg);border:1px solid var(--border);border-radius:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+            <strong>Ayşe K.</strong>
+            <div class="stars" style="font-size:0.85rem">★★★★☆</div>
+          </div>
+          <p style="font-size:0.88rem;color:var(--warm-gray);line-height:1.6">Tiramisu'su nefis! Pizzalar biraz bekletti ama kalite çok iyiydi. Ortam da çok şık.</p>
+          <div style="font-size:0.75rem;color:var(--warm-gray);margin-top:0.5rem">8 Ocak 2025</div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('Yorum yazmak için giriş yapın.')">✏️ Yorum Yaz</button>
+      </div>
+
+    </div><!-- /main content -->
+
+    <!-- Sidebar -->
+    <div class="profile-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">İletişim & Konum</div>
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div><div class="info-label">Adres</div><div class="info-value">Moda Cad. No:42, Kadıköy, İstanbul</div></div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📞</span>
+          <div><div class="info-label">Telefon</div><div class="info-value">+90 (216) 345 67 89</div></div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📧</span>
+          <div><div class="info-label">E-posta</div><div class="info-value">info@labella.com.tr</div></div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🌐</span>
+          <div><div class="info-label">Website</div><div class="info-value"><a href="#" class="form-link">labella.com.tr</a></div></div>
+        </div>
+        <button class="btn btn-ghost" style="width:100%;margin-top:0.75rem;font-size:0.82rem;padding:0.55rem" onclick="alert('Google Maps açılıyor...')">
+          🗺️ Google Maps'te Aç
+        </button>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Çalışma Saatleri</div>
+        <div style="font-size:0.82rem;display:flex;flex-direction:column;gap:0.5rem">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--warm-gray)">Pazartesi – Cuma</span><span style="font-weight:600">11:00 – 23:00</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--warm-gray)">Cumartesi</span><span style="font-weight:600">10:00 – 00:00</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--warm-gray)">Pazar</span><span style="font-weight:600">11:00 – 22:00</span></div>
+          <div style="margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+            <span style="width:8px;height:8px;background:var(--sage);border-radius:50%;display:inline-block"></span>
+            <span style="font-weight:700;color:var(--sage)">Şu An Açık</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Olanaklar</div>
+        <div class="amenity-grid">
+          <span class="amenity-badge">📶 Wi-Fi</span>
+          <span class="amenity-badge">🅿️ Otopark</span>
+          <span class="amenity-badge">🌿 Açık Alan</span>
+          <span class="amenity-badge">👶 Bebek Sandalyesi</span>
+          <span class="amenity-badge">♿ Engelli Girişi</span>
+          <span class="amenity-badge">🎵 Canlı Müzik</span>
+          <span class="amenity-badge">❄️ Klima</span>
+          <span class="amenity-badge">💳 Kredi Kartı</span>
+          <span class="amenity-badge">🐾 Evcil Hayvan</span>
+          <span class="amenity-badge">📺 TV/Maç</span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Ödeme Yöntemleri</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem;font-size:0.8rem">
+          <span style="background:var(--cream);border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:8px;font-weight:600">💵 Nakit</span>
+          <span style="background:var(--cream);border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:8px;font-weight:600">💳 Kredi Kartı</span>
+          <span style="background:var(--cream);border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:8px;font-weight:600">🏦 Havale</span>
+          <span style="background:var(--cream);border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:8px;font-weight:600">🎫 Sodexo</span>
+          <span style="background:var(--cream);border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:8px;font-weight:600">🎫 Multinet</span>
+        </div>
+      </div>
+
+      <div class="sidebar-card" style="background:rgba(212,139,46,0.06);border-color:rgba(212,139,46,0.2)">
+        <div class="sidebar-card-title" style="color:var(--amber)">🏷️ Aktif Kampanya</div>
+        <p style="font-size:0.85rem;color:var(--warm-gray);line-height:1.5">Hafta içi öğle yemeklerinde tüm makarnalarda <strong style="color:var(--rust)">%20 indirim!</strong> Her gün 12:00–15:00 arası geçerli.</p>
+        <div style="font-size:0.75rem;color:var(--warm-gray);margin-top:0.5rem">Bitiş: 31 Mart 2025</div>
+      </div>
+    </div>
+  </div><!-- /profile-content -->
+
+</div><!-- /profile page -->
+
+
+<!-- ===== MODALS ===== -->
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal" onclick="closeModalOutside(event,'loginModal')">
+  <div class="modal" style="position:relative">
+    <span class="modal-close" onclick="closeModal('loginModal')">×</span>
+    <div class="modal-title">Hoş Geldiniz</div>
+    <div class="modal-sub">Hesabınıza giriş yapın</div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchModalTab(this,'user')">Kullanıcı</div>
+      <div class="modal-tab" onclick="switchModalTab(this,'business')">İşletme</div>
+    </div>
+    <div class="social-login">
+      <button class="social-login-btn">🔴 Google</button>
+      <button class="social-login-btn">🔵 Facebook</button>
+    </div>
+    <div class="divider-text">veya e-posta ile</div>
+    <div class="form-group">
+      <label>E-posta veya Telefon</label>
+      <input type="email" class="form-control" placeholder="ornek@mail.com">
+    </div>
+    <div class="input-group">
+      <label style="display:block;font-size:0.82rem;font-weight:600;margin-bottom:0.35rem">Şifre</label>
+      <input type="password" class="form-control" placeholder="••••••••" id="loginPass">
+      <span class="input-eye" onclick="togglePassword('loginPass')">👁</span>
+    </div>
+    <div style="text-align:right;margin-bottom:1rem"><a href="#" class="form-link" style="font-size:0.82rem">Şifremi Unuttum</a></div>
+    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('Giriş yapıldı!');closeModal('loginModal')">Giriş Yap</button>
+    <p style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--warm-gray)">
+      Hesabınız yok mu? <a href="#" class="form-link" onclick="closeModal('loginModal');openModal('registerModal')">Kayıt Ol</a>
+    </p>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal-overlay" id="registerModal" onclick="closeModalOutside(event,'registerModal')">
+  <div class="modal" style="position:relative">
+    <span class="modal-close" onclick="closeModal('registerModal')">×</span>
+    <div class="modal-title">Hesap Oluştur</div>
+    <div class="modal-sub">Ücretsiz kayıt olun</div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchModalTab(this,'reg-user')">Kullanıcı</div>
+      <div class="modal-tab" onclick="closeModal('registerModal');openModal('businessModal')">İşletme</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Ad</label><input type="text" class="form-control" placeholder="Adınız"></div>
+      <div class="form-group"><label>Soyad</label><input type="text" class="form-control" placeholder="Soyadınız"></div>
+    </div>
+    <div class="form-group"><label>E-posta</label><input type="email" class="form-control" placeholder="ornek@mail.com"></div>
+    <div class="form-group"><label>Telefon</label><input type="tel" class="form-control" placeholder="+90 5__"></div>
+    <div class="input-group">
+      <label style="display:block;font-size:0.82rem;font-weight:600;margin-bottom:0.35rem">Şifre</label>
+      <input type="password" class="form-control" placeholder="En az 8 karakter" id="regPass">
+      <span class="input-eye" onclick="togglePassword('regPass')">👁</span>
+    </div>
+    <div class="input-group" style="margin-bottom:1rem">
+      <label style="display:block;font-size:0.82rem;font-weight:600;margin-bottom:0.35rem">Şifre Tekrar</label>
+      <input type="password" class="form-control" placeholder="Şifrenizi tekrar girin" id="regPass2">
+      <span class="input-eye" onclick="togglePassword('regPass2')">👁</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:1rem;font-size:0.82rem;color:var(--warm-gray)">
+      <input type="checkbox" id="kvkk" style="margin-top:2px">
+      <label for="kvkk">
+        <a href="#" class="form-link">Kullanıcı Sözleşmesi</a> ve <a href="#" class="form-link">KVKK Aydınlatma Metni</a>'ni okudum, onaylıyorum.
+      </label>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('Kayıt başarılı! E-posta adresinizi doğrulayın.');closeModal('registerModal')">Kayıt Ol</button>
+    <p style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--warm-gray)">
+      Zaten hesabınız var mı? <a href="#" class="form-link" onclick="closeModal('registerModal');openModal('loginModal')">Giriş Yap</a>
+    </p>
+  </div>
+</div>
+
+<!-- Business Register Modal -->
+<div class="modal-overlay" id="businessModal" onclick="closeModalOutside(event,'businessModal')">
+  <div class="modal" style="position:relative">
+    <span class="modal-close" onclick="closeModal('businessModal')">×</span>
+    <div class="modal-title">İşletme Kaydı</div>
+    <div class="modal-sub">Restoranınızı platforma ekleyin</div>
+    <div class="form-group"><label>İşletme Adı</label><input type="text" class="form-control" placeholder="Restoranınızın adı"></div>
+    <div class="form-group"><label>Yetkili Kişi Adı</label><input type="text" class="form-control" placeholder="Ad Soyad"></div>
+    <div class="form-group"><label>E-posta</label><input type="email" class="form-control" placeholder="isletme@mail.com"></div>
+    <div class="form-group"><label>Telefon</label><input type="tel" class="form-control" placeholder="+90 5__"></div>
+    <div class="form-row">
+      <div class="form-group"><label>İl</label><select class="form-control"><option>İstanbul</option><option>Ankara</option><option>İzmir</option></select></div>
+      <div class="form-group"><label>İlçe</label><input type="text" class="form-control" placeholder="İlçe"></div>
+    </div>
+    <div class="form-group">
+      <label>İşletme Türü</label>
+      <select class="form-control">
+        <option>Restoran</option><option>Kafe</option><option>Fırın/Pastane</option><option>Bar</option><option>Fast Food</option><option>Lokanta</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Üyelik Paketi</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+        <div style="border:2px solid var(--amber);background:rgba(212,139,46,0.08);border-radius:10px;padding:0.75rem;text-align:center;cursor:pointer">
+          <div style="font-weight:700;font-size:0.9rem;color:var(--amber)">Demo</div>
+          <div style="font-size:0.75rem;color:var(--warm-gray)">1 Ay · Ücretsiz</div>
+        </div>
+        <div style="border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;text-align:center;cursor:pointer">
+          <div style="font-weight:700;font-size:0.9rem">Aylık</div>
+          <div style="font-size:0.75rem;color:var(--warm-gray)">30 Gün · ₺100/ay</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:0.85rem" onclick="alert('İşletme kaydınız alındı! Paneliniz oluşturuldu.');closeModal('businessModal')">İşletmeyi Kaydet</button>
+  </div>
+</div>
+
+<script>
+// ===== PAGE NAVIGATION =====
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(page === 'home' ? 'homePage' : 'profilePage').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== MODAL =====
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+function switchModalTab(el, tab) {
+  el.closest('.modal').querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ===== PASSWORD TOGGLE =====
+function togglePassword(id) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  const m = document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+}
+
+// ===== TABS =====
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (tab === 'favorites') { openModal('loginModal'); return; }
+  if (tab === 'map') { alert('Harita görünümü açılıyor... 🗺️'); return; }
+}
+
+// ===== PROFILE TABS =====
+function switchProfileTab(el, tab) {
+  document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  ['menu','about','photos','hours','reservation','reviews','campaigns'].forEach(t => {
+    const el2 = document.getElementById('tab-' + t);
+    if (el2) el2.style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+// ===== MENU CAT SWITCH =====
+function switchMenuCat(el, cat) {
+  document.querySelectorAll('.menu-cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ===== FILTER CHIPS =====
+function toggleFilter(el) {
+  el.classList.toggle('active');
+}
+
+// ===== FAQ =====
+function toggleFaq(item) {
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ===== FEEDBACK TYPE =====
+function selectType(el) {
+  document.querySelectorAll('.type-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ===== RESTAURANT CARDS DATA =====
+const restaurants = [
+  { id:1, emoji:'🍕', name:'La Bella Cucina', cat:'İtalyan Mutfağı', location:'Kadıköy, İstanbul', rating:4.8, reviews:312, tags:['İtalyan','Pizza','Makarna'], badge:'open', badgeText:'Açık', campaign:false },
+  { id:2, emoji:'🍣', name:'Sushi Nakama', cat:'Japon Mutfağı', location:'Beşiktaş, İstanbul', rating:4.6, reviews:187, tags:['Japon','Sushi','Uzak Doğu'], badge:'campaign', badgeText:'%15 İndirim', campaign:true },
+  { id:3, emoji:'☕', name:'Brew & Roast', cat:'Kafe', location:'Beyoğlu, İstanbul', rating:4.9, reviews:543, tags:['Kahve','Kahvaltı','Vegan'], badge:'open', badgeText:'Açık', campaign:false },
+  { id:4, emoji:'🥙', name:'Ocakbaşı Erzurum', cat:'Türk Mutfağı', location:'Fatih, İstanbul', rating:4.7, reviews:298, tags:['Kebap','Türk','Et'], badge:'open', badgeText:'Açık', campaign:false },
+  { id:5, emoji:'🍔', name:'Smash Burger Co.', cat:'Fast Food', location:'Şişli, İstanbul', rating:4.4, reviews:156, tags:['Burger','Fast Food','Amerikan'], badge:'campaign', badgeText:'2 Al 1 Öde', campaign:true },
+  { id:6, emoji:'🌱', name:'Green Bowl', cat:'Vegan & Sağlıklı', location:'Nişantaşı, İstanbul', rating:4.5, reviews:89, tags:['Vegan','Salata','Organik'], badge:'open', badgeText:'Açık', campaign:false },
+];
+
+function renderCards(data) {
+  const grid = document.getElementById('restaurantGrid');
+  grid.innerHTML = data.map(r => `
+    <a class="listing-card" onclick="showPage('profile');return false" href="#">
+      <div class="listing-card-img" style="background:linear-gradient(135deg,${r.id%2?'#D4A82E':'#C04E2A'} 0%,${r.id%3?'#C04E2A':'#D4A82E'} 100%)">
+        <span style="font-size:3.5rem">${r.emoji}</span>
+        <span class="listing-card-badge ${r.badge}">${r.badgeText}</span>
+      </div>
+      <div class="listing-card-body">
+        <div class="listing-card-header">
+          <div class="listing-card-name">${r.name}</div>
+          <button class="listing-card-fav" onclick="event.stopPropagation();this.classList.toggle('active');this.textContent=this.classList.contains('active')?'❤️':'🤍'">🤍</button>
+        </div>
+        <div class="listing-card-meta">
+          <span>🍽️ ${r.cat}</span>
+          <span>📍 ${r.location.split(',')[0]}</span>
+        </div>
+        <div class="listing-card-meta" style="margin-bottom:0.75rem">
+          <span style="color:var(--amber)">★ ${r.rating}</span>
+          <span>(${r.reviews} yorum)</span>
+        </div>
+        <div class="listing-card-tags">
+          ${r.tags.map(t => `<span class="listing-tag">${t}</span>`).join('')}
+        </div>
+        <div class="listing-card-actions">
+          <span class="btn-sm btn-sm-primary">Menü İncele</span>
+          <span class="btn-sm btn-sm-outline">Profil</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+renderCards(restaurants);
+
+function filterSearch() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = q ? restaurants.filter(r => 
+    r.name.toLowerCase().includes(q) || 
+    r.cat.toLowerCase().includes(q) || 
+    r.tags.some(t => t.toLowerCase().includes(q))
+  ) : restaurants;
+  renderCards(filtered);
+  document.getElementById('listingCount').textContent = filtered.length + ' işletme listeleniyor';
+  document.getElementById('listing-section')?.scrollIntoView?.() || document.querySelector('.listing-section')?.scrollIntoView?.({behavior:'smooth'});
+}
+
+function filterByTag(tag) {
+  document.getElementById('searchInput').value = tag;
+  filterSearch();
+  document.querySelector('.listing-section').scrollIntoView({behavior:'smooth'});
+}
+
+function sortListings(val) {
+  const sorted = [...restaurants];
+  if (val === 'rating') sorted.sort((a,b) => b.rating - a.rating);
+  else if (val === 'reviews') sorted.sort((a,b) => b.reviews - a.reviews);
+  renderCards(sorted);
+}
+
+function loadMore() {
+  const extra = [
+    { id:7, emoji:'🍜', name:'Ramen House', cat:'Japon Mutfağı', location:'Ataşehir, İstanbul', rating:4.3, reviews:112, tags:['Japon','Noodle'], badge:'open', badgeText:'Açık' },
+    { id:8, emoji:'🥗', name:'Zeytin & Zeytinyağı', cat:'Türk Mutfağı', location:'Çengelköy, İstanbul', rating:4.7, reviews:231, tags:['Zeytinyağlı','Türk','Vegan'], badge:'open', badgeText:'Açık' },
+  ];
+  const grid = document.getElementById('restaurantGrid');
+  extra.forEach(r => {
+    const el = document.createElement('a');
+    el.className = 'listing-card';
+    el.href = '#';
+    el.onclick = () => showPage('profile');
+    el.innerHTML = `
+      <div class="listing-card-img" style="background:linear-gradient(135deg,#5A7A5A 0%,#D4A82E 100%)">
+        <span style="font-size:3.5rem">${r.emoji}</span>
+        <span class="listing-card-badge open">${r.badgeText}</span>
+      </div>
+      <div class="listing-card-body">
+        <div class="listing-card-header"><div class="listing-card-name">${r.name}</div><button class="listing-card-fav" onclick="event.stopPropagation();this.classList.toggle('active')">🤍</button></div>
+        <div class="listing-card-meta"><span>🍽️ ${r.cat}</span><span>📍 ${r.location.split(',')[0]}</span></div>
+        <div class="listing-card-meta"><span style="color:var(--amber)">★ ${r.rating}</span><span>(${r.reviews} yorum)</span></div>
+        <div class="listing-card-tags">${r.tags.map(t=>`<span class="listing-tag">${t}</span>`).join('')}</div>
+        <div class="listing-card-actions"><span class="btn-sm btn-sm-primary">Menü İncele</span><span class="btn-sm btn-sm-outline">Profil</span></div>
+      </div>`;
+    grid.appendChild(el);
+  });
+}
+
+function scrollToSearch() {
+  document.getElementById('search').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => document.getElementById('searchInput').focus(), 500);
+}
+
+function shareModal() {
+  alert('Paylaş:\n📸 Instagram\n💬 WhatsApp\n📘 Facebook\n🐦 Twitter\n🔗 Linki Kopyala');
+}
+
+function filterMenu(q) {
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const name = item.querySelector('.menu-item-name').textContent.toLowerCase();
+    item.style.display = name.includes(q.toLowerCase()) ? 'flex' : 'none';
+  });
+}
+
+// Close mobile menu on scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('mobileMenu').classList.remove('open');
+});
+
+// Keyboard support for modal close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
